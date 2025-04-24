@@ -2,7 +2,6 @@ export * from './common';
 export * from './character';
 import type { Item, ItemStack } from './character';
 export type EquipmentHand = 'mainHand' | 'offHand';
-
 export type Equipment = Record<EquipmentHand, Item | null>;
 
 export interface Inventory {
