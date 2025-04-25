@@ -1215,11 +1215,13 @@
         
         // Check if tile is within map bounds
         if (tileX >= 0 && tileX < mapData.width && tileY >= 0 && tileY < mapData.height) {
-          // Calculate distance from player (using Manhattan distance for simplicity)
-          const distance = Math.abs(x) + Math.abs(y);
+          // Calculate squared Euclidean distance for a circular effect
+          // (x and y here are offsets from the player's tile)
+          const squaredDistance = x * x + y * y;
           
           // If within visibility radius, mark as visible and discovered
-          if (distance <= VISIBILITY_RADIUS) {
+          // Compare squared distance to squared radius to avoid sqrt
+          if (squaredDistance < (VISIBILITY_RADIUS + 0.5) * (VISIBILITY_RADIUS + 0.5)) {
             newVisibleTiles[tileY][tileX] = true;
             discoveredTiles[tileY][tileX] = true;
           }
@@ -2210,9 +2212,6 @@
 </div>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap');
-  /* @import url('https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300..700&display=swap'); */
-
   .game-container {
     width: 100%;
     height: 100%;
@@ -2254,7 +2253,10 @@
     padding: 0;
     box-sizing: border-box;
     border: none;
-    transition: opacity 0.3s ease;
+    /* Start tiles dimmed by default */
+    opacity: 0.2;
+    filter: brightness(0.3);
+    transition: opacity 0.3s ease, filter 0.3s ease; /* Update transition */
   }
   
   .fog-hidden {
